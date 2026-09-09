@@ -4,12 +4,12 @@ export interface Board {
   ownerId: string
   memberIds: string[]
   columnIds: string[]
-  createAt: string
+  createdAt: string
 }
 
 export interface Column {
   id: string
-  board: string
+  boardId: string
   name: string
   taskIds: string[]
 }

@@ -4,7 +4,7 @@ export interface User {
   password: string
   displayName: string
   color: string
-  createAt: string
+  createdAt: string
 }
 
 export interface Session {
