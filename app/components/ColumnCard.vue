@@ -187,14 +187,9 @@ function submitNewTask() {
     </div>
 
     <div class="space-y-2">
-      <div
-        v-for="task in tasks"
-        :key="task.id"
-        class="rounded-md bg-white px-3 py-2 text-sm shadow-sm"
-      >
-        {{ task.title }}
-      </div>
+      <TaskCard v-for="task in tasks" :key="task.id" :task="task" />
     </div>
+
 
     <div class="mt-2">
       <button
