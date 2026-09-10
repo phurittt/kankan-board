@@ -9,6 +9,7 @@ export const useBoardsStore = defineStore('boards', () => {
   }, { deep: true })
 
   const authStore = useAuthStore()
+  const userStore = useUserStore()
 
   const boardsForCurrentUser = computed(() => {
     const userId = authStore.currentUserId
@@ -27,6 +28,7 @@ export const useBoardsStore = defineStore('boards', () => {
     const newBoard: Board = {
       id: crypto.randomUUID(),
       name,
+      color: '#3b82f6',
       ownerId: userId,
       memberIds: [userId],
       columnIds: [],
@@ -41,9 +43,29 @@ export const useBoardsStore = defineStore('boards', () => {
     if (board) board.name = name
   }
 
+  function setBoardColor(id: string, color: string) {
+    const board = getBoardById(id)
+    if (board) board.color = color
+  }
+
+  function addMemberByUsername(boardId: string, username: string): { success: boolean, message: string} {
+    const board = getBoardById(boardId)
+    if (!board) return { success: false, message: 'ไม่พบบอร์ด' }
+
+    const user = userStore.findByUsername(username)
+    if (!user) return { success: false, message: 'ไม่พบ username นี้' }
+
+    if (board.memberIds.includes(user.id)) {
+      return { success: false, message: 'เป็นสมาชิกอยู่แล้ว' } 
+    }
+
+    board.memberIds.push(user.id)
+    return { success: true, message: `เพิ่ม ${user.displayName} แล้ว` }
+  }
+
   function deleteBoard(id: string) {
     boards.value = boards.value.filter((b) => b.id !== id)
   }
 
-  return { boards, boardsForCurrentUser, getBoardById, createBoard, renameBoard, deleteBoard }
+  return { boards, boardsForCurrentUser, getBoardById, createBoard, renameBoard, deleteBoard, setBoardColor, addMemberByUsername }
 })

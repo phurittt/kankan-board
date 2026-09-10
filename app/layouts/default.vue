@@ -23,7 +23,7 @@ function handleLogout() {
 
 <template>
   <div class="flex h-screen flex-col bg-gray-50">
-    <header class="flex items-center justify-between border-b bg-white px-4 py-3 shadow-sm">
+    <header class="flex items-center justify-between border-b border-gray-300 bg-white px-4 py-3 shadow-sm">
       <div class="flex items-center gap-3">
         <button class="text-gray-600 hover:text-gray-900" @click="toggleSidebar">
           ☰
@@ -46,9 +46,9 @@ function handleLogout() {
 
           <div
             v-if="isProfileMenuOpen"
-            class="absolute right-0 z-10 mt-2 w-48 rounded-md border bg-white py-1 shadow-lg"
+            class="absolute right-0 z-10 mt-2 w-48 rounded-md bg-white py-1 shadow-lg"
           >
-            <p class="border-b px-4 py-2 text-sm font-medium text-gray-900">
+            <p class="border-b border-gray-100 px-4 py-2 text-sm font-medium text-gray-900">
               {{ authStore.currentUser?.displayName }}
             </p>
             <button
@@ -63,7 +63,7 @@ function handleLogout() {
     </header>
 
     <div class="flex flex-1 overflow-hidden">
-      <aside v-if="isSidebarOpen" class="w-60 shrink-0 overflow-y-auto border-r bg-white">
+      <aside v-if="isSidebarOpen" class="w-60 shrink-0 overflow-y-auto border-r border-gray-300 bg-white">
         <nav class="p-2">
           <NuxtLink to="/boards" class="block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100">
             ทุกบอร์ด
