@@ -25,20 +25,20 @@ function handleLogout() {
   <div class="flex h-screen flex-col bg-gray-50">
     <header class="flex items-center justify-between border-b border-gray-300 bg-white px-4 py-3 shadow-sm">
       <div class="flex items-center gap-3">
-        <button class="text-gray-600 hover:text-gray-900" @click="toggleSidebar">
+        <button class="cursor-pointer text-gray-600 hover:text-gray-900" @click="toggleSidebar">
           ☰
         </button>
         <span class="font-bold text-gray-900">Kanban Board</span>
       </div>
 
       <div class="flex items-center gap-4">
-        <button class="text-xl text-gray-600 hover:text-gray-900" title="การแจ้งเตือน">
+        <button class="cursor-pointer text-xl text-gray-600 hover:text-gray-900" title="การแจ้งเตือน">
           🔔
         </button>
 
         <div class="relative">
           <button
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-lg hover:bg-gray-300"
+            class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-200 text-lg hover:bg-gray-300"
             @click="toggleProfileMenu"
           >
             👤
@@ -52,7 +52,7 @@ function handleLogout() {
               {{ authStore.currentUser?.displayName }}
             </p>
             <button
-              class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+              class="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
               @click="handleLogout"
             >
               ออกจากระบบ

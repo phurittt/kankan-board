@@ -53,7 +53,7 @@ function handleSubmit() {
 
         <button
           type="submit"
-          class="w-full rounded-md bg-blue-600 py-2 font-medium text-white hover:bg-blue-700"
+          class="w-full cursor-pointer rounded-md bg-blue-600 py-2 font-medium text-white hover:bg-blue-700"
         >
           เข้าสู่ระบบ
         </button>
