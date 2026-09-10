@@ -75,7 +75,14 @@ function createNewTag() {
             class="flex-1 rounded-md border border-gray-300 px-2 py-1 text-sm"
             @input="handleLabelInput(tag.id, $event)"
           >
+          <button
+            class="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-md border border-gray-300 text-xs text-gray-500 hover:bg-gray-50"
+            @click="tasksStore.deleteTag(tag.id)"
+          >
+            ลบ
+          </button>
         </div>
+
       </div>
 
       <button
