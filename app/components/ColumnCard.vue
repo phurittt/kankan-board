@@ -9,6 +9,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'set-active-editor': [value: string | null]
+  'open-task': [taskId: string]
 }>()
 
 const columnsStore = useColumnsStore()
@@ -187,7 +188,7 @@ function submitNewTask() {
     </div>
 
     <div class="space-y-2">
-      <TaskCard v-for="task in tasks" :key="task.id" :task="task" />
+      <TaskCard v-for="task in tasks" :key="task.id" :task="task" @open="emit('open-task', task.id)" />
     </div>
 
 

@@ -5,6 +5,10 @@ const boardId = route.params.boardId as string
 const boardsStore = useBoardsStore()
 const columnsStore = useColumnsStore()
 
+const tasksStore = useTasksStore()
+const openTaskId = ref<string | null>(null)
+const openTask = computed(() => (openTaskId.value ? tasksStore.getTaskById(openTaskId.value) : null))
+
 const board = computed(() => boardsStore.getBoardById(boardId))
 
 if (!board.value) {
@@ -50,6 +54,7 @@ onUnmounted(() => {
         :column="column"
         :active-editor="activeEditor"
         @set-active-editor="activeEditor = $event"
+        @open-task="openTaskId=$event"
       />
 
       <div data-column-menu class="w-72 shrink-0">
@@ -80,5 +85,6 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+    <TaskDetailDialog v-if="openTask" :task="openTask" @close="openTaskId = null" />
   </div>
 </template>

@@ -57,7 +57,7 @@ function toggleDone() {
         :class="task.done ? 'border-green-600 bg-green-600' : 'border-gray-400 bg-white'"
         @click.stop="toggleDone"
       />
-      <span :class="task.done ? 'text-gray-400 line-through' : 'text-gray-800'">
+      <span class="min-w-0 flex-1 break-words" :class="task.done ? 'text-gray-400 line-through' : 'text-gray-800'">
         {{ task.title }}
       </span>
     </div>
