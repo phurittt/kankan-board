@@ -1,4 +1,5 @@
 <script setup lang="ts">
+definePageMeta({ layout: false })
 import { useAuthStore } from '~/stores/auth';
 
 const username = ref('')

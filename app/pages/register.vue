@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ layout: false })
+
 const username = ref('')
 const password = ref('')
 const displayName = ref('')
