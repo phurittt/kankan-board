@@ -1,30 +1,93 @@
 <script setup lang="ts">
 const authStore = useAuthStore()
+const boardsStore = useBoardsStore()
+const route = useRoute()
+
+const isSidebarOpen = ref(true)
+const isProfileMenuOpen = ref(false)
+
+function toggleSidebar() {
+  isSidebarOpen.value = !isSidebarOpen.value
+}
+
+function toggleProfileMenu() {
+  isProfileMenuOpen.value = !isProfileMenuOpen.value
+}
 
 function handleLogout() {
+  isProfileMenuOpen.value = false
   authStore.logout()
   navigateTo('/login')
 }
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="flex h-screen flex-col bg-gray-50">
     <header class="flex items-center justify-between border-b bg-white px-4 py-3 shadow-sm">
-      <span class="font-bold text-gray-900">Kanban Board</span>
-
       <div class="flex items-center gap-3">
-        <span class="text-sm text-gray-600">{{ authStore.currentUser?.displayName }}</span>
-        <button
-          class="rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-100"
-          @click="handleLogout"
-        >
-          ออกจากระบบ
+        <button class="text-gray-600 hover:text-gray-900" @click="toggleSidebar">
+          ☰
         </button>
+        <span class="font-bold text-gray-900">Kanban Board</span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button class="text-xl text-gray-600 hover:text-gray-900" title="การแจ้งเตือน">
+          🔔
+        </button>
+
+        <div class="relative">
+          <button
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-lg hover:bg-gray-300"
+            @click="toggleProfileMenu"
+          >
+            👤
+          </button>
+
+          <div
+            v-if="isProfileMenuOpen"
+            class="absolute right-0 z-10 mt-2 w-48 rounded-md border bg-white py-1 shadow-lg"
+          >
+            <p class="border-b px-4 py-2 text-sm font-medium text-gray-900">
+              {{ authStore.currentUser?.displayName }}
+            </p>
+            <button
+              class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+              @click="handleLogout"
+            >
+              ออกจากระบบ
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
-    <main>
-      <slot />
-    </main>
+    <div class="flex flex-1 overflow-hidden">
+      <aside v-if="isSidebarOpen" class="w-60 shrink-0 overflow-y-auto border-r bg-white">
+        <nav class="p-2">
+          <NuxtLink to="/boards" class="block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100">
+            ทุกบอร์ด
+          </NuxtLink>
+
+          <p class="mt-3 px-3 text-xs font-semibold uppercase text-gray-400">
+            บอร์ดของฉัน
+          </p>
+
+          <NuxtLink
+            v-for="board in boardsStore.boardsForCurrentUser"
+            :key="board.id"
+            :to="`/boards/${board.id}`"
+            class="block truncate rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+            :class="route.params.boardId === board.id ? 'bg-blue-50 text-blue-700' : 'text-gray-700'"
+          >
+            {{ board.name }}
+          </NuxtLink>
+        </nav>
+      </aside>
+
+      <main class="flex-1 overflow-y-auto">
+        <slot />
+      </main>
+    </div>
   </div>
 </template>
