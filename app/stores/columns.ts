@@ -62,17 +62,23 @@ export const useColumnsStore = defineStore('columns', () => {
   }
 
   function deleteColumn(id: string) {
-    const column = getColumnById(id)
-    if (!column) return
+  const column = getColumnById(id)
+  if (!column) return
 
-    const boardsStore = useBoardsStore()
-    const board = boardsStore.getBoardById(column.boardId)
-    if (board) {
-      board.columnIds = board.columnIds.filter((cid) => cid !== id)
-    }
-
-    columns.value = columns.value.filter((c) => c.id !== id)
+  const boardsStore = useBoardsStore()
+  const board = boardsStore.getBoardById(column.boardId)
+  if (board) {
+    board.columnIds = board.columnIds.filter((cid) => cid !== id)
   }
+
+  const tasksStore = useTasksStore()
+  for (const taskId of column.taskIds) {
+    tasksStore.deleteTask(taskId)
+  }
+
+  columns.value = columns.value.filter((c) => c.id !== id)
+}
+
 
   return {
     columns,
