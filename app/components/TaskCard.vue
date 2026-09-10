@@ -44,12 +44,13 @@ function toggleDone() {
       <span
         v-for="tag in tags"
         :key="tag.id"
-        class="rounded-full px-2 py-0.5 text-xs text-white"
+        class="flex h-4 w-14 shrink-0 items-center justify-center rounded-full px-1 text-white"
         :style="{ backgroundColor: tag.color }"
       >
-        {{ tag.label }}
+        <span class="min-w-0 truncate text-[10px] leading-none">{{ tag.label }}</span>
       </span>
     </div>
+
 
     <div class="flex items-start gap-2">
       <button
