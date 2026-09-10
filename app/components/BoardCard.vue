@@ -59,19 +59,20 @@ function confirmDelete() {
 </script>
 
 <template>
-  <div
-    class="relative min-h-36 rounded-lg bg-white p-4 shadow-sm"
+  <NuxtLink
+    :to="`/boards/${board.id}`"
+    class="relative block min-h-36 rounded-lg bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
     :style="{ borderTopWidth: '4px', borderTopColor: board.color }"
   >
     <div class="flex items-start justify-between">
-      <NuxtLink :to="`/boards/${board.id}`" class="font-semibold text-gray-900 hover:underline">
+      <span class="font-semibold text-gray-900">
         {{ board.name }}
-      </NuxtLink>
+      </span>
 
       <button
         data-board-menu
         class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-lg text-gray-600 hover:bg-black/20"
-        @click="emit('open-menu')"
+        @click.stop.prevent="emit('open-menu')"
       >
         ⋯
       </button>
@@ -81,6 +82,7 @@ function confirmDelete() {
       v-if="isMenuOpen"
       data-board-menu
       class="absolute right-4 top-12 z-10 w-64 rounded-md bg-white p-3 shadow-lg"
+      @click.stop.prevent
     >
       <button
         class="absolute right-2 top-2 flex h-5 w-5 cursor-pointer items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-700"
@@ -156,5 +158,5 @@ function confirmDelete() {
         </div>
       </div>
     </div>
-  </div>
+  </NuxtLink>
 </template>

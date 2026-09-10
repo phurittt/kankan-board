@@ -4,6 +4,7 @@ const boardStore = useBoardsStore()
 const openMenuBoardId = ref<string | null>(null)
 const confirmDeleteBoardId = ref<string | null>(null)
 const isCreateBoardOpen = ref(false)
+const searchQuery = ref('')
 
 function closeMenu() {
   openMenuBoardId.value = null
@@ -28,7 +29,18 @@ onUnmounted(() => {
 
 <template>
   <div class="mx-auto max-w-5xl p-4">
-    <h1 class="mb-4 text-xl font-bold">บอร์ด ของฉัน</h1>
+    <h1 class="mb-4 text-xl font-bold">บอร์ดของฉัน</h1>
+
+    <div class="mb-4 flex items-center justify-between gap-4">
+      <SortMenu />
+
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="ค้นหาบอร์ด..."
+        class="w-48 rounded-md border border-gray-300 px-3 py-1.5 text-sm"
+      >
+    </div>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <CreateBoardCard
