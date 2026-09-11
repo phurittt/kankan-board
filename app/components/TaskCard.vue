@@ -48,7 +48,7 @@ const dueDateLabel = computed(() => {
     class="cursor-pointer overflow-hidden rounded-md bg-white text-sm shadow-sm hover:shadow-md"
     @click="emit('open')"
   >
-    <img v-if="task.imageUrl" :src="task.imageUrl" class="block h-32 w-full object-cover" alt="">
+    <img v-if="task.imageUrl" :src="task.imageUrl" class="block w-full" alt="">
 
     <div class="p-2">
       <div v-if="tags.length > 0" class="mb-1 flex flex-wrap gap-1">
