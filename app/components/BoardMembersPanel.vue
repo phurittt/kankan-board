@@ -7,6 +7,7 @@ const props = defineProps<{
 
 const boardsStore = useBoardsStore()
 const usersStore = useUserStore()
+const authStore = useAuthStore()
 
 const isOpen = ref(false)
 const memberUsernameDraft = ref('')
@@ -42,6 +43,7 @@ function handleAddMember() {
 
 function handleRemoveMember(userId: string) {
   boardsStore.removeMember(props.board.id, userId)
+  if (userId === authStore.currentUserId) navigateTo('/boards')
 }
 
 function handleClickOutside(event: MouseEvent) {
@@ -97,7 +99,7 @@ onUnmounted(() => {
             class="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-md border border-gray-300 text-xs text-gray-500 hover:bg-gray-50"
             @click="handleRemoveMember(user.id)"
           >
-            ลบ
+            {{ user.id === authStore.currentUserId ? 'ออก' : 'ลบ' }}
           </button>
         </div>
       </div>
