@@ -67,5 +67,19 @@ export const useBoardsStore = defineStore('boards', () => {
     boards.value = boards.value.filter((b) => b.id !== id)
   }
 
-  return { boards, boardsForCurrentUser, getBoardById, createBoard, renameBoard, deleteBoard, setBoardColor, addMemberByUsername }
+  function removeMember(boardId: string, userId: string) {
+    const board = getBoardById(boardId)
+    if (!board || userId === board.ownerId) return
+
+    board.memberIds = board.memberIds.filter((id) => id !== userId)
+
+    const tasksStore = useTasksStore()
+    for (const task of tasksStore.tasks) {
+      if (task.boardId === boardId && task.assigneeIds.includes(userId)) {
+        tasksStore.unassignMember(task.id, userId)
+      }
+    }
+  }
+
+  return { boards, boardsForCurrentUser, getBoardById, createBoard, renameBoard, deleteBoard, setBoardColor, addMemberByUsername, removeMember }
 })

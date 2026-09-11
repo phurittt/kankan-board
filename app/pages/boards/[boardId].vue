@@ -15,18 +15,6 @@ if (!board.value) {
   navigateTo('/boards')
 }
 
-const usersStore = useUserStore()
-
-const boardMembers = computed(() => {
-  if (!board.value) return []
-  return board.value.memberIds
-    .map((id) => usersStore.getUserById(id))
-    .filter((u): u is NonNullable<typeof u> => u !== undefined)
-})
-
-const visibleMembers = computed(() => boardMembers.value.slice(0, 5))
-const extraMemberCount = computed(() => Math.max(0, boardMembers.value.length - 5))
-
 const columns = computed(() => columnsStore.columnsForBoard(boardId))
 
 const newColumnName = ref('')
@@ -60,23 +48,7 @@ onUnmounted(() => {
     <div class="flex items-center justify-between bg-black/3 px-4 py-3 shadow-md">
       <h1 class="text-xl font-bold text-gray-900">{{ board.name }}</h1>
 
-      <div class="flex -space-x-2">
-        <div
-          v-for="user in visibleMembers"
-          :key="user.id"
-          class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-medium text-white"
-          :style="{ backgroundColor: user.color }"
-          :title="user.displayName"
-        >
-          {{ user.displayName.charAt(0).toUpperCase() }}
-        </div>
-        <div
-          v-if="extraMemberCount > 0"
-          class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-300 text-xs font-medium text-gray-700"
-        >
-          +{{ extraMemberCount }}
-        </div>
-      </div>
+      <BoardMembersPanel :board="board" />
     </div>
 
     <div class="flex flex-1 flex-col p-4">
