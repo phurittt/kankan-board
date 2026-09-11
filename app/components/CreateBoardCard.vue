@@ -26,7 +26,7 @@ watch(() => props.isOpen, (isOpen) => {
 function submitCreateBoard() {
   const name = draftName.value.trim()
   if (!name) {
-    nameError.value = 'โปรดใส่ชื่อบอร์ด'
+    nameError.value = 'โปรดกรอกชื่อบอร์ด'
     return
   }
 

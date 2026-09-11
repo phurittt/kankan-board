@@ -5,11 +5,18 @@ const username = ref('')
 const password = ref('')
 const displayName = ref('')
 const errorMessage = ref('')
+const usernameError = ref('')
+const displayNameError = ref('')
+const passwordError = ref('')
 
 const authStore = useAuthStore()
 
 function handleSubmit() {
   errorMessage.value = ''
+  usernameError.value = username.value.trim() ? '' : 'โปรดกรอก username'
+  displayNameError.value = displayName.value.trim() ? '' : 'โปรดกรอกชื่อที่แสดง'
+  passwordError.value = password.value ? '' : 'โปรดกรอก password'
+  if (usernameError.value || displayNameError.value || passwordError.value) return
 
   const success = authStore.register(username.value, displayName.value, password.value)
   if (!success) {
@@ -27,35 +34,9 @@ function handleSubmit() {
       <h1 class="mb-6 text-2xl font-bold text-gray-900">สมัครสมาชิก</h1>
 
       <form class="space-y-4" @submit.prevent="handleSubmit">
-        <div>
-          <label class="mb-1 block text-sm font-medium text-gray-700">Username</label>
-          <input
-            v-model="username"
-            type="text"
-            required
-            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          >
-        </div>
-
-        <div>
-          <label class="mb-1 block text-sm font-medium text-gray-700">ชื่อที่แสดง</label>
-          <input
-            v-model="displayName"
-            type="text"
-            required
-            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          >
-        </div>
-
-        <div>
-          <label class="mb-1 block text-sm font-medium text-gray-700">Password</label>
-          <input
-            v-model="password"
-            type="password"
-            required
-            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          >
-        </div>
+        <AuthField v-model="username" label="Username" :error="usernameError" />
+        <AuthField v-model="displayName" label="ชื่อที่แสดง" :error="displayNameError" />
+        <AuthField v-model="password" label="Password" type="password" :error="passwordError" />
 
         <p v-if="errorMessage" class="text-sm text-red-600">
           {{ errorMessage }}

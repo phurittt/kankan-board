@@ -5,11 +5,16 @@ import { useAuthStore } from '~/stores/auth';
 const username = ref('')
 const password = ref('')
 const errorMessage = ref('')
+const usernameError = ref('')
+const passwordError = ref('')
 
 const authStore = useAuthStore()
 
 function handleSubmit() {
   errorMessage.value = ''
+  usernameError.value = username.value.trim() ? '' : 'โปรดกรอก username'
+  passwordError.value = password.value ? '' : 'โปรดกรอก password'
+  if (usernameError.value || passwordError.value) return
 
   const success = authStore.login(username.value, password.value)
   if (!success) {
@@ -27,25 +32,8 @@ function handleSubmit() {
       <h1 class="mb-6 text-2xl font-bold text-gray-900">เข้าสู่ระบบ</h1>
 
       <form class="space-y-4" @submit.prevent="handleSubmit">
-        <div>
-          <label class="mb-1 block text-sm font-medium text-gray-700">Username</label>
-          <input
-            v-model="username"
-            type="text"
-            required
-            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          >
-        </div>
-
-        <div>
-          <label class="mb-1 block text-sm font-medium text-gray-700">Password</label>
-          <input
-            v-model="password"
-            type="password"
-            required
-            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          >
-        </div>
+        <AuthField v-model="username" label="Username" :error="usernameError" />
+        <AuthField v-model="password" label="Password" type="password" :error="passwordError" />
 
         <p v-if="errorMessage" class="text-sm text-red-600">
           {{ errorMessage }}
