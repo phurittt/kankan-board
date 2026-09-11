@@ -47,7 +47,7 @@ onUnmounted(() => {
 <template>
   <div v-if="board" class="flex h-full flex-col">
     <div class="flex items-center justify-between bg-black/3 px-4 py-3 shadow-md">
-      <h1 class="text-xl font-bold text-gray-900">{{ board.name }}</h1>
+      <h1 class="ml-4 text-lg font-bold text-gray-700">{{ board.name }}</h1>
 
       <BoardMembersPanel :board="board" />
     </div>

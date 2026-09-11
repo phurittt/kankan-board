@@ -35,11 +35,15 @@ onUnmounted(() => {
 
 <template>
   <div data-sort-menu class="relative inline-block">
+    <label class="ml-1 mb-1 block text-sm font-medium text-gray-500">เรียงลำดับโดย</label>
     <button
-      class="flex cursor-pointer items-center gap-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+      class="flex w-40 cursor-pointer items-center justify-between gap-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
       @click="toggle"
     >
-      เรียงลำดับโดย: {{ selected }}
+      {{ selected }}
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 shrink-0 text-gray-400">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      </svg>
     </button>
 
     <div
@@ -50,7 +54,7 @@ onUnmounted(() => {
         v-for="option in OPTIONS"
         :key="option"
         class="block w-full cursor-pointer px-3 py-1.5 text-left text-sm hover:bg-gray-100"
-        :class="selected === option ? 'font-medium text-blue-600' : 'text-gray-700'"
+        :class="selected === option ? 'bg-blue-50 text-blue-700' : 'text-gray-700'"
         @click="select(option)"
       >
         {{ option }}
