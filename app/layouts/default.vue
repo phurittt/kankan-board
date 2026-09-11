@@ -4,6 +4,7 @@ const boardsStore = useBoardsStore()
 const route = useRoute()
 
 const isSidebarOpen = ref(true)
+const isBoardsListOpen = ref(true)
 const isProfileMenuOpen = ref(false)
 
 function toggleSidebar() {
@@ -163,23 +164,41 @@ onUnmounted(() => {
             Boards
           </NuxtLink>
 
-          <p class="mt-3 px-3 text-sm font-bold uppercase text-gray-400">
-            Your Boards
-          </p>
+          <hr class="my-2 border-gray-200">
 
-          <NuxtLink
-            v-for="board in boardsStore.boardsForCurrentUser"
-            :key="board.id"
-            :to="`/boards/${board.id}`"
-            class="flex items-center gap-2 rounded-md px-3 py-2 pl-6 text-sm hover:bg-gray-100"
-            :class="route.params.boardId === board.id ? 'bg-blue-50 text-blue-700' : 'text-gray-700'"
+          <button
+            class="flex w-full cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm font-bold uppercase text-gray-700 hover:bg-gray-100"
+            @click="isBoardsListOpen = !isBoardsListOpen"
           >
-            <span
-              class="h-5 w-5 shrink-0 rounded"
-              :style="{ backgroundColor: board.color }"
-            />
-            <span class="truncate">{{ board.name }}</span>
-          </NuxtLink>
+            Your Boards
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="h-5 w-5 transition-transform"
+              :class="isBoardsListOpen ? '' : 'rotate-180'"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+            </svg>
+          </button>
+
+          <template v-if="isBoardsListOpen">
+            <NuxtLink
+              v-for="board in boardsStore.boardsForCurrentUser"
+              :key="board.id"
+              :to="`/boards/${board.id}`"
+              class="flex items-center gap-2 rounded-md px-3 py-2 pl-6 text-sm hover:bg-gray-100"
+              :class="route.params.boardId === board.id ? 'bg-blue-50 text-blue-700' : 'text-gray-700'"
+            >
+              <span
+                class="h-5 w-5 shrink-0 rounded"
+                :style="{ backgroundColor: board.color }"
+              />
+              <span class="truncate">{{ board.name }}</span>
+            </NuxtLink>
+          </template>
         </nav>
       </aside>
 
