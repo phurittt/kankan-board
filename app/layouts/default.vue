@@ -109,10 +109,11 @@ onUnmounted(() => {
 
         <div class="relative" data-header-menu>
           <button
-            class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-200 text-lg hover:bg-gray-300"
+            class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-sm font-medium text-white"
+            :style="{ backgroundColor: authStore.currentUser?.color }"
             @click="toggleProfileMenu"
           >
-            👤
+            {{ authStore.currentUser?.displayName.charAt(0).toUpperCase() }}
           </button>
 
           <div
