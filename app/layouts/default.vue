@@ -72,11 +72,13 @@ onUnmounted(() => {
       <div class="flex items-center gap-4">
         <div class="relative" data-header-menu>
           <button
-            class="relative cursor-pointer text-xl text-gray-600 hover:text-gray-900"
+            class="relative cursor-pointer text-gray-600 hover:text-gray-900"
             title="การแจ้งเตือน"
             @click="toggleNotifications"
           >
-            🔔
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+            </svg>
             <span
               v-if="unreadCount > 0"
               class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white"
@@ -145,19 +147,22 @@ onUnmounted(() => {
             </button>
           </div>
 
-          <NuxtLink to="/boards" class="block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100">
-            ทุกบอร์ด
+          <NuxtLink to="/boards" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 text-gray-500">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+            </svg>
+            Boards
           </NuxtLink>
 
-          <p class="mt-3 px-3 text-xs font-semibold uppercase text-gray-400">
-            บอร์ดของฉัน
+          <p class="mt-3 px-3 text-sm font-bold uppercase text-gray-400">
+            Your Boards
           </p>
 
           <NuxtLink
             v-for="board in boardsStore.boardsForCurrentUser"
             :key="board.id"
             :to="`/boards/${board.id}`"
-            class="block truncate rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+            class="block truncate rounded-md px-3 py-2 pl-6 text-sm hover:bg-gray-100"
             :class="route.params.boardId === board.id ? 'bg-blue-50 text-blue-700' : 'text-gray-700'"
           >
             {{ board.name }}
