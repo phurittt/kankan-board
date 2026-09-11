@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Column } from '~/types/board'
 import { PALETTE_COLORS } from '~/utils/palette'
+import draggable from 'vuedraggable'
+import type { Task } from '~/types/task'
 
 const props = defineProps<{
   column: Column
@@ -78,6 +80,21 @@ function submitNewTask() {
   tasksStore.createTask(props.column.id, props.column.boardId, title)
   newTaskTitle.value = ''
   emit('set-active-editor', null)
+}
+
+//Drag
+
+const localTasks = ref<Task[]>([...tasks.value])
+
+watch(tasks, (newTasks) => {
+  localTasks.value = [...newTasks]
+})
+
+function handleChange(event: any) {
+  if (event.moved) {
+    const { element, newIndex } = event.moved
+    tasksStore.moveTask(element.id, props.column.id, props.column.id, newIndex)
+  }
 }
 </script>
 
@@ -187,9 +204,17 @@ function submitNewTask() {
       </div>
     </div>
 
-    <div class="space-y-2">
-      <TaskCard v-for="task in tasks" :key="task.id" :task="task" @open="emit('open-task', task.id)" />
-    </div>
+    <draggable
+      v-model="localTasks"
+      item-key="id"
+      class="space-y-2"
+      @change="handleChange"
+    >
+      <template #item="{ element }">
+        <TaskCard :task="element" @open="emit('open-task', element.id)" />
+      </template>
+    </draggable>
+
 
 
     <div class="mt-2">
