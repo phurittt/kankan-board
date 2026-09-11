@@ -14,16 +14,21 @@ const BOARD_COLORS = ['#3b82f6', '#f97316', '#10b981', '#ec4899', '#8b5cf6', '#e
 
 const draftName = ref('')
 const draftColor = ref(BOARD_COLORS[0] ?? '#3b82f6')
+const nameError = ref('')
 
 watch(() => props.isOpen, (isOpen) => {
   if (!isOpen) return
   draftName.value = ''
   draftColor.value = BOARD_COLORS[0] ?? '#3b82f6'
+  nameError.value = ''
 })
 
 function submitCreateBoard() {
   const name = draftName.value.trim()
-  if (!name) return
+  if (!name) {
+    nameError.value = 'โปรดใส่ชื่อบอร์ด'
+    return
+  }
 
   const board = boardStore.createBoard(name)
   if (!board) return
@@ -61,11 +66,14 @@ function submitCreateBoard() {
         v-model="draftName"
         type="text"
         placeholder="ชื่อบอร์ดใหม่"
-        class="mb-3 w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
+        class="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
         @keyup.enter="submitCreateBoard"
       >
+      <p v-if="nameError" class="mt-1 text-xs text-red-600">
+        {{ nameError }}
+      </p>
 
-      <label class="mb-1 block text-xs font-medium text-gray-500">สีบอร์ด</label>
+      <label class="mb-1 mt-3 block text-xs font-medium text-gray-500">สีบอร์ด</label>
       <div class="mb-3 flex flex-wrap gap-2">
         <button
           class="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 bg-white text-gray-400"
