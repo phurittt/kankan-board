@@ -25,12 +25,16 @@ function handleLogout() {
 // notifications
 const notificationsStore = useNotificationsStore()
 const isNotificationsOpen = ref(false)
+const showUnreadOnly = ref(false)
 
 const unreadCount = computed(() =>
   authStore.currentUserId ? notificationsStore.unreadForUser(authStore.currentUserId).length : 0
 )
 const myNotifications = computed(() =>
   authStore.currentUserId ? notificationsStore.allForUser(authStore.currentUserId) : []
+)
+const visibleNotifications = computed(() =>
+  showUnreadOnly.value ? myNotifications.value.filter((n) => !n.read) : myNotifications.value
 )
 
 function toggleNotifications() {
@@ -101,14 +105,29 @@ onUnmounted(() => {
             v-if="isNotificationsOpen"
             class="absolute right-0 z-10 mt-2 max-h-96 w-72 overflow-y-auto rounded-md bg-white py-1 shadow-lg"
           >
-            <p class="border-b border-gray-100 px-4 py-2 text-sm font-medium text-gray-900">
-              แจ้งเตือน
-            </p>
-            <p v-if="myNotifications.length === 0" class="px-4 py-3 text-sm text-gray-500">
+            <div class="flex items-center justify-between border-b border-gray-100 px-4 py-2">
+              <p class="text-sm font-medium text-gray-900">
+                แจ้งเตือน
+              </p>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500">แสดงเฉพาะที่ยังไม่อ่าน</span>
+                <button
+                  class="relative h-5 w-9 shrink-0 cursor-pointer rounded-full transition-colors"
+                  :class="showUnreadOnly ? 'bg-blue-600' : 'bg-gray-300'"
+                  @click="showUnreadOnly = !showUnreadOnly"
+                >
+                  <span
+                    class="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform"
+                    :class="showUnreadOnly ? 'translate-x-4' : 'translate-x-0'"
+                  />
+                </button>
+              </div>
+            </div>
+            <p v-if="visibleNotifications.length === 0" class="px-4 py-3 text-sm text-gray-500">
               ยังไม่มีการแจ้งเตือน
             </p>
             <button
-              v-for="n in myNotifications"
+              v-for="n in visibleNotifications"
               :key="n.id"
               class="block w-full cursor-pointer border-b border-gray-100 px-4 py-2 text-left text-sm hover:bg-gray-50"
               :class="n.read ? 'text-gray-500' : 'bg-blue-50 font-medium text-gray-900'"
