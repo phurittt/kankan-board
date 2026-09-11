@@ -108,7 +108,7 @@ function createNewTag() {
 
       <div class="grid grid-cols-4 gap-2">
         <button
-          v-for="color in PALETTE_COLORS"
+          v-for="color in TAG_COLORS"
           :key="color"
           class="h-10 w-10 cursor-pointer rounded border-2"
           :style="{ backgroundColor: color, borderColor: currentColorPickerTag?.color === color ? '#111827' : 'transparent' }"

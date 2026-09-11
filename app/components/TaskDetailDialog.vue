@@ -186,7 +186,7 @@ function handleMoved() {
             class="cursor-pointer rounded-md border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
             @click="isConfirmingDelete = true"
           >
-            ลบ task
+            ลบ
           </button>
 
           <div

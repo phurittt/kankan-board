@@ -1,1 +1,2 @@
 export const PALETTE_COLORS = ['#71a8ff', '#f97316', '#10b981', '#ed76b1', '#a088d9', '#ed7f7f', '#eab308', '#859cbd']
+export const TAG_COLORS = ['#3b82f6', '#f97316', '#10b981', '#ec4899', '#8b5cf6', '#ef4444', '#eab308', '#64748b']
