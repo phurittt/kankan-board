@@ -1,17 +1,21 @@
 <script setup lang="ts">
 const isOpen = ref(false)
-const selected = ref('ล่าสุด')
+const selected = ref('เข้าไปแก้ไขล่าสุด')
 
-const OPTIONS = ['ล่าสุด', 'เก่าสุด', 'A-Z', 'Z-A']
+const OPTIONS = ['เข้าไปแก้ไขล่าสุด', 'สร้างล่าสุด', 'สร้างเก่าสุด']
+
+const emit = defineEmits<{
+  change: [value: string]
+}>()
 
 function toggle() {
   isOpen.value = !isOpen.value
 }
 
-// ตอนนี้แค่เก็บว่าเลือกอะไรไว้โชว์ ยังไม่ได้เรียงบอร์ดจริง
 function select(option: string) {
   selected.value = option
   isOpen.value = false
+  emit('change', option)
 }
 
 function handleClickOutside(event: MouseEvent) {
@@ -40,7 +44,7 @@ onUnmounted(() => {
 
     <div
       v-if="isOpen"
-      class="absolute right-0 z-10 mt-1 w-36 rounded-md bg-white py-1 shadow-lg"
+      class="absolute right-0 z-10 mt-1 w-40 rounded-md bg-white py-1 shadow-lg"
     >
       <button
         v-for="option in OPTIONS"

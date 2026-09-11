@@ -169,9 +169,9 @@ function handleChange(event: any) {
             <div class="flex flex-wrap gap-2">
               <button
                 class="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border-2 bg-white text-gray-400"
-                :style="{ borderColor: column.color === '#ffffff' ? '#111827' : '#d1d5db' }"
+                :style="{ borderColor: column.color === '#e5e7eb' ? '#111827' : '#d1d5db' }"
                 title="ไม่มีสี"
-                @click="selectColor('#ffffff')"
+                @click="selectColor('#e5e7eb')"
               >
                 <svg viewBox="0 0 20 20" class="h-full w-full">
                   <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.3" />

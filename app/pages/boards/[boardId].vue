@@ -36,6 +36,7 @@ function handleClickOutside(event: MouseEvent) {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  boardsStore.touchBoard(boardId)
 })
 
 onUnmounted(() => {

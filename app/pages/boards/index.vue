@@ -4,6 +4,18 @@ const boardStore = useBoardsStore()
 const openMenuBoardId = ref<string | null>(null)
 const confirmDeleteBoardId = ref<string | null>(null)
 const isCreateBoardOpen = ref(false)
+const sortMode = ref('เข้าไปแก้ไขล่าสุด')
+
+const sortedBoards = computed(() => {
+  const boards = [...boardStore.boardsForCurrentUser]
+  if (sortMode.value === 'สร้างล่าสุด') {
+    return boards.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  }
+  if (sortMode.value === 'สร้างเก่าสุด') {
+    return boards.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+  }
+  return boards.sort((a, b) => (b.lastEditedAt ?? b.createdAt).localeCompare(a.lastEditedAt ?? a.createdAt))
+})
 
 function closeMenu() {
   openMenuBoardId.value = null
@@ -31,7 +43,7 @@ onUnmounted(() => {
     <h1 class="mb-4 text-xl font-bold">Your Boards</h1>
 
     <div class="mb-4">
-      <SortMenu />
+      <SortMenu @change="sortMode = $event" />
     </div>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -42,7 +54,7 @@ onUnmounted(() => {
       />
 
       <BoardCard
-        v-for="board in boardStore.boardsForCurrentUser"
+        v-for="board in sortedBoards"
         :key="board.id"
         :board="board"
         :is-menu-open="openMenuBoardId === board.id"

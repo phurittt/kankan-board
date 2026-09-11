@@ -31,7 +31,7 @@ export const useColumnsStore = defineStore('columns', () => {
       id: crypto.randomUUID(),
       boardId,
       name,
-      color: '#f3f4f6',
+      color: '#e5e7eb',
       taskIds: [],
     }
     columns.value.push(newColumn)

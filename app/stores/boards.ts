@@ -25,6 +25,7 @@ export const useBoardsStore = defineStore('boards', () => {
     const userId = authStore.currentUserId
     if (!userId) return
     
+    const now = new Date().toISOString()
     const newBoard: Board = {
       id: crypto.randomUUID(),
       name,
@@ -32,7 +33,8 @@ export const useBoardsStore = defineStore('boards', () => {
       ownerId: userId,
       memberIds: [userId],
       columnIds: [],
-      createdAt: new Date().toISOString(),
+      createdAt: now,
+      lastEditedAt: now,
     }
     boards.value.push(newBoard)
     return newBoard
@@ -63,6 +65,11 @@ export const useBoardsStore = defineStore('boards', () => {
     return { success: true, message: `เพิ่ม ${user.displayName} แล้ว` }
   }
 
+  function touchBoard(id: string) {
+    const board = getBoardById(id)
+    if (board) board.lastEditedAt = new Date().toISOString()
+  }
+
   function deleteBoard(id: string) {
     boards.value = boards.value.filter((b) => b.id !== id)
   }
@@ -81,5 +88,5 @@ export const useBoardsStore = defineStore('boards', () => {
     }
   }
 
-  return { boards, boardsForCurrentUser, getBoardById, createBoard, renameBoard, deleteBoard, setBoardColor, addMemberByUsername, removeMember }
+  return { boards, boardsForCurrentUser, getBoardById, createBoard, renameBoard, deleteBoard, setBoardColor, addMemberByUsername, removeMember, touchBoard }
 })

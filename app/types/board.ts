@@ -6,6 +6,7 @@ export interface Board {
   memberIds: string[]
   columnIds: string[]
   createdAt: string
+  lastEditedAt: string
 }
 
 export interface Column {
