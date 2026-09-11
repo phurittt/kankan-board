@@ -16,7 +16,8 @@ const usersStore = useUserStore()
 const titleDraft = ref(props.task.title)
 const descriptionDraft = ref(props.task.description ?? '')
 
-const activeSection = ref<'label' | 'date' | 'member' | null>(null)
+const activeSection = ref<'label' | 'date' | 'member' | 'move' | null>(null)
+const isConfirmingDelete = ref(false)
 
 watch(() => props.task.id, () => {
   titleDraft.value = props.task.title
@@ -56,8 +57,18 @@ const boardMembers = computed(() => {
 })
 const assignedMembers = computed(() => boardMembers.value.filter((u) => props.task.assigneeIds.includes(u.id)))
 
-function toggleSection(section: 'label' | 'date' | 'member') {
+function toggleSection(section: 'label' | 'date' | 'member' | 'move') {
   activeSection.value = activeSection.value === section ? null : section
+}
+
+function confirmDeleteTask() {
+  tasksStore.deleteTask(props.task.id)
+  emit('close')
+}
+
+function handleMoved() {
+  activeSection.value = null
+  emit('close')
 }
 </script>
 
@@ -100,6 +111,13 @@ function toggleSection(section: 'label' | 'date' | 'member') {
         >
           สมาชิก
         </button>
+        <button
+          class="cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50"
+          :class="activeSection === 'move' ? 'bg-gray-100 text-gray-900' : 'text-gray-700'"
+          @click="toggleSection('move')"
+        >
+          ย้าย
+        </button>
       </div>
 
       <div v-if="appliedTags.length > 0 || assignedMembers.length > 0" class="mb-4 space-y-2">
@@ -132,6 +150,7 @@ function toggleSection(section: 'label' | 'date' | 'member') {
 
       <TaskLabelPanel v-if="activeSection === 'label'" :task="task" @close="activeSection = null" />
       <TaskMemberPanel v-if="activeSection === 'member'" :task="task" @close="activeSection = null" />
+      <TaskMovePanel v-if="activeSection === 'move'" :task="task" @close="activeSection = null" @moved="handleMoved" />
 
       <div class="mb-2">
         <label class="mb-1 block text-sm font-medium text-gray-700">คำอธิบาย</label>
@@ -142,13 +161,47 @@ function toggleSection(section: 'label' | 'date' | 'member') {
           placeholder="เพิ่มคำอธิบายรายละเอียด task..."
         />
       </div>
-      <div class="flex gap-2">
-        <button class="cursor-pointer rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700" @click="saveDescription">
-          บันทึก
-        </button>
-        <button class="cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100" @click="cancelDescription">
-          ยกเลิก
-        </button>
+      <div class="flex items-center justify-between">
+        <div class="flex gap-2">
+          <button class="cursor-pointer rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700" @click="saveDescription">
+            บันทึก
+          </button>
+          <button class="cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100" @click="cancelDescription">
+            ยกเลิก
+          </button>
+        </div>
+
+        <div class="relative">
+          <button
+            class="cursor-pointer rounded-md border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
+            @click="isConfirmingDelete = true"
+          >
+            ลบ task
+          </button>
+
+          <div
+            v-if="isConfirmingDelete"
+            class="absolute bottom-full right-0 mb-2 w-56 rounded-md bg-white p-3 shadow-lg"
+          >
+            <p class="mb-3 text-sm text-gray-700">
+              Task นี้จะถูกลบถาวร
+            </p>
+            <div class="flex gap-2">
+              <button
+                class="flex-1 cursor-pointer rounded-md bg-red-600 px-2 py-1 text-sm text-white hover:bg-red-700"
+                @click="confirmDeleteTask"
+              >
+                ลบ
+              </button>
+              <button
+                class="flex-1 cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                @click="isConfirmingDelete = false"
+              >
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
