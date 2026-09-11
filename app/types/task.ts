@@ -9,6 +9,7 @@ export interface Task {
   assigneeIds: string[]
   dueDate: string | null
   dueTime: string | null
+  imageUrl?: string
   createdAt: string
   updatedAt: string
 }
