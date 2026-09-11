@@ -131,11 +131,13 @@ export const useTasksStore = defineStore('tasks', () => {
 
     const authStore = useAuthStore()
     if (userId !== authStore.currentUserId) {
+      const boardsStore = useBoardsStore()
+      const board = boardsStore.getBoardById(task.boardId)
       const notificationsStore = useNotificationsStore()
       notificationsStore.push({
         recipientUserId: userId,
         type: 'task-assigned',
-        message: `คุณถูกมอบหมายให้ทำ "${task.title}"`,
+        message: `คุณได้รับมอบหมายให้ทำ "${task.title}" ที่บอร์ด "${board?.name ?? ''}"`,
         taskId: task.id,
         boardId: task.boardId,
       })
