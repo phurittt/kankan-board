@@ -167,7 +167,7 @@ onUnmounted(() => {
 
           <NuxtLink
             to="/boards"
-            class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100"
+            class="flex items-center gap-2 rounded-md px-3 py-2 text-base font-bold hover:bg-gray-300"
             :class="route.path === '/boards' ? 'bg-blue-50 text-blue-700' : 'text-gray-700'"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4" :class="route.path === '/boards' ? 'text-blue-700' : 'text-gray-500'">
@@ -201,7 +201,7 @@ onUnmounted(() => {
               v-for="board in boardsStore.boardsForCurrentUser"
               :key="board.id"
               :to="`/boards/${board.id}`"
-              class="flex items-center gap-2 rounded-md px-3 py-2 pl-6 text-sm hover:bg-gray-100"
+              class="flex items-center gap-2 rounded-md px-3 py-2 pl-6 text-sm font-medium hover:bg-gray-100"
               :class="route.params.boardId === board.id ? 'bg-blue-50 text-blue-700' : 'text-gray-700'"
             >
               <span
