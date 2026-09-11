@@ -64,9 +64,18 @@ onUnmounted(() => {
   <div class="flex h-screen flex-col bg-gray-50">
     <header class="flex items-center justify-between border-b border-gray-300 bg-white px-4 py-3 shadow-sm">
       <div class="flex items-center gap-3">
-        <button class="cursor-pointer text-gray-600 hover:text-gray-900" @click="toggleSidebar">
+        <button class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-900" @click="toggleSidebar">
           ☰
         </button>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-7 w-7 shrink-0">
+          <circle cx="12" cy="12" r="11" fill="black" />
+          <rect x="6" y="6.5" width="3.2" height="4.5" rx="0.8" fill="white" />
+          <rect x="10.4" y="6.5" width="3.2" height="4.5" rx="0.8" fill="white" />
+          <rect x="14.8" y="6.5" width="3.2" height="4.5" rx="0.8" fill="white" />
+          <rect x="6" y="13" width="3.2" height="4.5" rx="0.8" fill="white" />
+          <rect x="10.4" y="13" width="3.2" height="4.5" rx="0.8" fill="white" />
+          <rect x="14.8" y="13" width="3.2" height="4.5" rx="0.8" fill="white" />
+        </svg>
         <span class="font-bold text-gray-900">Kanban Board</span>
       </div>
 
@@ -92,6 +101,9 @@ onUnmounted(() => {
             v-if="isNotificationsOpen"
             class="absolute right-0 z-10 mt-2 max-h-96 w-72 overflow-y-auto rounded-md bg-white py-1 shadow-lg"
           >
+            <p class="border-b border-gray-100 px-4 py-2 text-sm font-medium text-gray-900">
+              แจ้งเตือน
+            </p>
             <p v-if="myNotifications.length === 0" class="px-4 py-3 text-sm text-gray-500">
               ยังไม่มีการแจ้งเตือน
             </p>

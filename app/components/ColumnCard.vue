@@ -137,7 +137,7 @@ function handleChange(event: any) {
 
           <button
             data-column-menu
-            class="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-gray-600 hover:bg-black/10"
+            class="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-xl font-bold text-gray-800 hover:bg-black/10"
             @click.stop="emit('set-active-editor', menuKey)"
           >
             ⋯

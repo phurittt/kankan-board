@@ -84,7 +84,7 @@ function confirmDelete() {
 
       <button
         data-board-menu
-        class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-lg text-gray-600 hover:bg-black/20"
+        class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-2xl font-bold text-gray-800 hover:bg-black/20"
         @click.stop.prevent="emit('open-menu')"
       >
         ⋯

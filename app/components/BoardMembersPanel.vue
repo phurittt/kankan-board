@@ -88,6 +88,7 @@ onUnmounted(() => {
     </button>
 
     <div v-if="isOpen" class="absolute right-0 z-10 mt-2 w-64 rounded-md bg-white p-3 shadow-lg" @click.stop>
+      <p class="mb-2 text-center text-sm font-medium text-gray-700">สมาชิก</p>
       <div class="mb-3 space-y-2">
         <div v-for="user in members" :key="user.id" class="flex items-center gap-2">
           <div
