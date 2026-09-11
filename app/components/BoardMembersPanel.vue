@@ -63,7 +63,10 @@ onUnmounted(() => {
 
 <template>
   <div class="relative" data-board-members-panel>
-    <button class="flex cursor-pointer items-center gap-2" @click.stop="toggleOpen">
+    <button
+      class="flex cursor-pointer items-center gap-2 rounded-md p-1 hover:bg-gray-200"
+      @click.stop="toggleOpen"
+    >
       <span class="text-xs text-gray-600">เพิ่ม</span>
       <div class="flex -space-x-2">
         <div

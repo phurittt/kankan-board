@@ -72,7 +72,7 @@ onUnmounted(() => {
       <div class="flex items-center gap-4">
         <div class="relative" data-header-menu>
           <button
-            class="relative cursor-pointer text-gray-600 hover:text-gray-900"
+            class="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             title="การแจ้งเตือน"
             @click="toggleNotifications"
           >
@@ -81,7 +81,7 @@ onUnmounted(() => {
             </svg>
             <span
               v-if="unreadCount > 0"
-              class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white"
+              class="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white"
             >
               {{ unreadCount }}
             </span>
@@ -109,11 +109,15 @@ onUnmounted(() => {
 
         <div class="relative" data-header-menu>
           <button
-            class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-sm font-medium text-white"
-            :style="{ backgroundColor: authStore.currentUser?.color }"
+            class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md hover:bg-gray-100"
             @click="toggleProfileMenu"
           >
-            {{ authStore.currentUser?.displayName.charAt(0).toUpperCase() }}
+            <span
+              class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium text-white"
+              :style="{ backgroundColor: authStore.currentUser?.color }"
+            >
+              {{ authStore.currentUser?.displayName.charAt(0).toUpperCase() }}
+            </span>
           </button>
 
           <div
