@@ -24,6 +24,7 @@ function openColorPicker(tagId: string) {
 function selectTagColor(color: string) {
   if (!colorPickerTagId.value) return
   tasksStore.updateTag(colorPickerTagId.value, { color })
+  backToLabelList()
 }
 
 function backToLabelList() {
