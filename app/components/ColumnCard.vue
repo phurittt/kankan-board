@@ -94,6 +94,9 @@ function handleChange(event: any) {
   if (event.moved) {
     const { element, newIndex } = event.moved
     tasksStore.moveTask(element.id, props.column.id, props.column.id, newIndex)
+  } else if (event.added) {
+    const { element, newIndex } = event.added
+    tasksStore.moveTask(element.id, element.columnId, props.column.id, newIndex) 
   }
 }
 </script>
@@ -103,147 +106,152 @@ function handleChange(event: any) {
     class="relative w-72 shrink-0 rounded-lg p-3"
     :style="{ backgroundColor: column.color }"
   >
-    <div class="mb-2 flex items-center justify-between gap-2">
-      <input
-        v-if="isEditingName"
-        v-model="nameDraft"
-        type="text"
-        class="w-full rounded-md border border-gray-300 px-2 py-1 text-sm font-semibold"
-        autofocus
-        @click.stop
-        @blur="commitName"
-        @keyup.enter="commitName"
-      >
-      <span
-        v-else
-        class="cursor-pointer truncate text-sm font-semibold text-gray-700"
-        @click.stop="startEditName"
-      >
-        {{ column.name }}
-      </span>
-
-      <button
-        data-column-menu
-        class="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-gray-600 hover:bg-black/10"
-        @click.stop="emit('set-active-editor', menuKey)"
-      >
-        ⋯
-      </button>
-    </div>
-
-    <div
-      v-if="isMenuOpen"
-      data-column-menu
-      class="absolute right-2 top-10 z-10 w-56 rounded-md bg-white p-2 shadow-lg"
-      @click.stop
-    >
-      <button
-        class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
-        @click="handleAddTaskClick"
-      >
-        เพิ่มการ์ด task
-      </button>
-
-      <button
-        class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
-        @click="activeSubPanel = activeSubPanel === 'move' ? null : 'move'"
-      >
-        ย้ายรายการ
-      </button>
-
-      <div class="px-2 py-1.5">
-        <p class="mb-1 text-xs font-medium text-gray-500">สี</p>
-        <div class="flex flex-wrap gap-2">
-          <button
-            v-for="color in PALETTE_COLORS"
-            :key="color"
-            class="h-5 w-5 cursor-pointer rounded-full border-2"
-            :style="{ backgroundColor: color, borderColor: column.color === color ? '#111827' : 'transparent' }"
-            @click="selectColor(color)"
-          />
-        </div>
-      </div>
-
-      <button
-        class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-red-600 hover:bg-red-50"
-        @click="activeSubPanel = activeSubPanel === 'delete' ? null : 'delete'"
-      >
-        ลบ
-      </button>
-
-      <div
-        v-if="activeSubPanel === 'move'"
-        class="absolute left-full top-0 ml-2 w-48 rounded-md bg-white p-3 shadow-lg"
-      >
-        <label class="mb-1 block text-xs font-medium text-gray-500">ตำแหน่ง</label>
-        <select v-model.number="moveTargetIndex" class="mb-3 w-full rounded-md border border-gray-300 px-2 py-1 text-sm">
-          <option v-for="n in columnsInBoard.length" :key="n" :value="n - 1">
-            {{ n }}
-          </option>
-        </select>
-        <button class="w-full cursor-pointer rounded-md bg-blue-600 px-2 py-1 text-sm text-white hover:bg-blue-700" @click="handleMove">
-          ย้าย
-        </button>
-      </div>
-
-      <div
-        v-if="activeSubPanel === 'delete'"
-        class="absolute left-full top-0 ml-2 w-56 rounded-md bg-white p-3 shadow-lg"
-      >
-        <p class="mb-3 text-sm text-gray-700">
-          คอลัมน์และ task ข้างในจะถูกลบถาวร
-        </p>
-        <div class="flex gap-2">
-          <button class="flex-1 cursor-pointer rounded-md bg-red-600 px-2 py-1 text-sm text-white hover:bg-red-700" @click="confirmDeleteColumn">
-            ลบ
-          </button>
-          <button class="flex-1 cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm text-gray-700 hover:bg-gray-100" @click="activeSubPanel = null">
-            ยกเลิก
-          </button>
-        </div>
-      </div>
-    </div>
-
     <draggable
       v-model="localTasks"
       item-key="id"
-      class="space-y-2"
+      group="tasks"
+      class="min-h-16 select-none space-y-2"
+      :force-fallback="true"
+      ghost-class="opacity-40"
       @change="handleChange"
     >
+      <template #header>
+        <div class="mb-2 flex items-center justify-between gap-2">
+          <input
+            v-if="isEditingName"
+            v-model="nameDraft"
+            type="text"
+            class="w-full rounded-md border border-gray-300 px-2 py-1 text-sm font-semibold"
+            autofocus
+            @click.stop
+            @blur="commitName"
+            @keyup.enter="commitName"
+          >
+          <span
+            v-else
+            class="cursor-pointer truncate text-sm font-semibold text-gray-700"
+            @click.stop="startEditName"
+          >
+            {{ column.name }}
+          </span>
+
+          <button
+            data-column-menu
+            class="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-gray-600 hover:bg-black/10"
+            @click.stop="emit('set-active-editor', menuKey)"
+          >
+            ⋯
+          </button>
+        </div>
+
+        <div
+          v-if="isMenuOpen"
+          data-column-menu
+          class="absolute right-2 top-10 z-10 w-56 rounded-md bg-white p-2 shadow-lg"
+          @click.stop
+        >
+          <button
+            class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
+            @click="handleAddTaskClick"
+          >
+            เพิ่มการ์ด task
+          </button>
+
+          <button
+            class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
+            @click="activeSubPanel = activeSubPanel === 'move' ? null : 'move'"
+          >
+            ย้ายรายการ
+          </button>
+
+          <div class="px-2 py-1.5">
+            <p class="mb-1 text-xs font-medium text-gray-500">สี</p>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="color in PALETTE_COLORS"
+                :key="color"
+                class="h-5 w-5 cursor-pointer rounded-full border-2"
+                :style="{ backgroundColor: color, borderColor: column.color === color ? '#111827' : 'transparent' }"
+                @click="selectColor(color)"
+              />
+            </div>
+          </div>
+
+          <button
+            class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-red-600 hover:bg-red-50"
+            @click="activeSubPanel = activeSubPanel === 'delete' ? null : 'delete'"
+          >
+            ลบ
+          </button>
+
+          <div
+            v-if="activeSubPanel === 'move'"
+            class="absolute left-full top-0 ml-2 w-48 rounded-md bg-white p-3 shadow-lg"
+          >
+            <label class="mb-1 block text-xs font-medium text-gray-500">ตำแหน่ง</label>
+            <select v-model.number="moveTargetIndex" class="mb-3 w-full rounded-md border border-gray-300 px-2 py-1 text-sm">
+              <option v-for="n in columnsInBoard.length" :key="n" :value="n - 1">
+                {{ n }}
+              </option>
+            </select>
+            <button class="w-full cursor-pointer rounded-md bg-blue-600 px-2 py-1 text-sm text-white hover:bg-blue-700" @click="handleMove">
+              ย้าย
+            </button>
+          </div>
+
+          <div
+            v-if="activeSubPanel === 'delete'"
+            class="absolute left-full top-0 ml-2 w-56 rounded-md bg-white p-3 shadow-lg"
+          >
+            <p class="mb-3 text-sm text-gray-700">
+              คอลัมน์และ task ข้างในจะถูกลบถาวร
+            </p>
+            <div class="flex gap-2">
+              <button class="flex-1 cursor-pointer rounded-md bg-red-600 px-2 py-1 text-sm text-white hover:bg-red-700" @click="confirmDeleteColumn">
+                ลบ
+              </button>
+              <button class="flex-1 cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm text-gray-700 hover:bg-gray-100" @click="activeSubPanel = null">
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+
       <template #item="{ element }">
         <TaskCard :task="element" @open="emit('open-task', element.id)" />
       </template>
-    </draggable>
 
-
-
-    <div class="mt-2">
-      <button
-        v-if="!isAddingTask"
-        class="w-full cursor-pointer rounded-md p-2 text-left text-sm text-gray-600 hover:bg-black/10"
-        @click.stop="handleAddTaskClick"
-      >
-        + เพิ่มการ์ด
-      </button>
-
-      <div v-else @click.stop>
-        <input
-          v-model="newTaskTitle"
-          type="text"
-          placeholder="ชื่อ task"
-          class="mb-2 w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
-          autofocus
-          @keyup.enter="submitNewTask"
-        >
-        <div class="flex gap-2">
-          <button class="cursor-pointer rounded-md bg-blue-600 px-3 py-1 text-sm text-white" @click="submitNewTask">
-            เพิ่ม
+      <template #footer>
+        <div class="mt-2">
+          <button
+            v-if="!isAddingTask"
+            class="w-full cursor-pointer rounded-md p-2 text-left text-sm text-gray-600 hover:bg-black/10"
+            @click.stop="handleAddTaskClick"
+          >
+            + เพิ่มการ์ด
           </button>
-          <button class="cursor-pointer rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700" @click="emit('set-active-editor', null)">
-            ยกเลิก
-          </button>
+
+          <div v-else @click.stop>
+            <input
+              v-model="newTaskTitle"
+              type="text"
+              placeholder="ชื่อ task"
+              class="mb-2 w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
+              autofocus
+              @keyup.enter="submitNewTask"
+            >
+            <div class="flex gap-2">
+              <button class="cursor-pointer rounded-md bg-blue-600 px-3 py-1 text-sm text-white" @click="submitNewTask">
+                เพิ่ม
+              </button>
+              <button class="cursor-pointer rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700" @click="emit('set-active-editor', null)">
+                ยกเลิก
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </template>
+    </draggable>
   </div>
 </template>
