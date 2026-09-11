@@ -4,7 +4,7 @@ const boardStore = useBoardsStore()
 const openMenuBoardId = ref<string | null>(null)
 const confirmDeleteBoardId = ref<string | null>(null)
 const isCreateBoardOpen = ref(false)
-const sortMode = ref('เข้าไปแก้ไขล่าสุด')
+const sortMode = ref('แก้ไขล่าสุด')
 
 const sortedBoards = computed(() => {
   const boards = [...boardStore.boardsForCurrentUser]

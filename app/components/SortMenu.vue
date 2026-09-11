@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const isOpen = ref(false)
-const selected = ref('เข้าไปแก้ไขล่าสุด')
+const selected = ref('แก้ไขล่าสุด')
 
-const OPTIONS = ['เข้าไปแก้ไขล่าสุด', 'สร้างล่าสุด', 'สร้างเก่าสุด']
+const OPTIONS = ['แก้ไขล่าสุด', 'สร้างล่าสุด', 'สร้างเก่าสุด']
 
 const emit = defineEmits<{
   change: [value: string]
