@@ -135,7 +135,7 @@ onUnmounted(() => {
     </header>
 
     <div class="flex flex-1 overflow-hidden">
-      <aside v-if="isSidebarOpen" class="w-60 shrink-0 overflow-y-auto border-r border-gray-300 bg-white">
+      <aside v-if="isSidebarOpen" class="w-80 shrink-0 overflow-y-auto border-r border-gray-300 bg-white">
         <nav class="p-2">
           <div class="flex justify-end">
             <button

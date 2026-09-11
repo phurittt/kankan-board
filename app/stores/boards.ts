@@ -71,6 +71,9 @@ export const useBoardsStore = defineStore('boards', () => {
   }
 
   function deleteBoard(id: string) {
+    const board = getBoardById(id)
+    const userId = authStore.currentUserId
+    if (!board || userId !== board.ownerId) return
     boards.value = boards.value.filter((b) => b.id !== id)
   }
 

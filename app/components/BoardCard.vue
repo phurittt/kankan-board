@@ -16,6 +16,9 @@ const emit = defineEmits<{
 
 const boardStore = useBoardsStore()
 const usersStore = useUserStore()
+const authStore = useAuthStore()
+
+const isOwner = computed(() => authStore.currentUserId === props.board.ownerId)
 
 const BOARD_COLORS = ['#3b82f6', '#f97316', '#10b981', '#ec4899', '#8b5cf6', '#ef4444', '#eab308', '#64748b']
 
@@ -150,6 +153,7 @@ function confirmDelete() {
       </p>
 
       <button
+        v-if="isOwner"
         class="mt-3 w-full cursor-pointer rounded-md border border-red-200 px-2 py-1 text-sm text-red-600 hover:bg-red-50"
         @click="emit('request-delete')"
       >

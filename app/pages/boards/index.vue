@@ -39,14 +39,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-5xl p-4">
+  <div class="p-4">
     <h1 class="mb-4 text-xl font-bold">Your Boards</h1>
 
     <div class="mb-4">
       <SortMenu @change="sortMode = $event" />
     </div>
 
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
       <CreateBoardCard
         :is-open="isCreateBoardOpen"
         @open="isCreateBoardOpen = true"
