@@ -166,6 +166,13 @@ function handleChange(event: any) {
 
           <button
             class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
+            @click="startEditName"
+          >
+            แก้ไขชื่อ
+          </button>
+
+          <button
+            class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
             @click="activeSubPanel = activeSubPanel === 'move' ? null : 'move'"
           >
             ย้ายรายการ
