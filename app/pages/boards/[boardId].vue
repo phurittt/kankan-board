@@ -15,6 +15,18 @@ if (!board.value) {
   navigateTo('/boards')
 }
 
+const usersStore = useUserStore()
+
+const boardMembers = computed(() => {
+  if (!board.value) return []
+  return board.value.memberIds
+    .map((id) => usersStore.getUserById(id))
+    .filter((u): u is NonNullable<typeof u> => u !== undefined)
+})
+
+const visibleMembers = computed(() => boardMembers.value.slice(0, 5))
+const extraMemberCount = computed(() => Math.max(0, boardMembers.value.length - 5))
+
 const columns = computed(() => columnsStore.columnsForBoard(boardId))
 
 const newColumnName = ref('')
@@ -44,43 +56,65 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="board" class="flex h-full flex-col p-4">
-    <h1 class="mb-4 text-xl font-bold">{{ board.name }}</h1>
+  <div v-if="board" class="flex h-full flex-col">
+    <div class="flex items-center justify-between bg-black/3 px-4 py-3 shadow-md">
+      <h1 class="text-xl font-bold text-gray-900">{{ board.name }}</h1>
 
-    <div class="flex flex-1 items-start gap-4 overflow-x-auto pb-4">
-      <ColumnCard
-        v-for="column in columns"
-        :key="column.id"
-        :column="column"
-        :active-editor="activeEditor"
-        @set-active-editor="activeEditor = $event"
-        @open-task="openTaskId=$event"
-      />
-
-      <div data-column-menu class="w-72 shrink-0">
-        <button
-          v-if="activeEditor !== 'add-column'"
-          class="w-full cursor-pointer rounded-lg bg-gray-100 p-3 text-left text-sm text-gray-600 hover:bg-gray-200"
-          @click.stop="activeEditor = 'add-column'"
+      <div class="flex -space-x-2">
+        <div
+          v-for="user in visibleMembers"
+          :key="user.id"
+          class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-medium text-white"
+          :style="{ backgroundColor: user.color }"
+          :title="user.displayName"
         >
-          + เพิ่มคอลัมน์
-        </button>
+          {{ user.displayName.charAt(0).toUpperCase() }}
+        </div>
+        <div
+          v-if="extraMemberCount > 0"
+          class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-300 text-xs font-medium text-gray-700"
+        >
+          +{{ extraMemberCount }}
+        </div>
+      </div>
+    </div>
 
-        <div v-else class="rounded-lg bg-gray-100 p-3" @click.stop>
-          <input
-            v-model="newColumnName"
-            type="text"
-            placeholder="ชื่อคอลัมน์"
-            class="mb-2 w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
-            @keyup.enter="handleCreateColumn"
+    <div class="flex flex-1 flex-col p-4">
+      <div class="flex flex-1 items-start gap-4 overflow-x-auto pb-4">
+        <ColumnCard
+          v-for="column in columns"
+          :key="column.id"
+          :column="column"
+          :active-editor="activeEditor"
+          @set-active-editor="activeEditor = $event"
+          @open-task="openTaskId=$event"
+        />
+
+        <div data-column-menu class="w-72 shrink-0">
+          <button
+            v-if="activeEditor !== 'add-column'"
+            class="w-full cursor-pointer rounded-lg bg-gray-100 p-3 text-left text-sm text-gray-600 hover:bg-gray-200"
+            @click.stop="activeEditor = 'add-column'"
           >
-          <div class="flex gap-2">
-            <button class="cursor-pointer rounded-md bg-blue-600 px-3 py-1 text-sm text-white" @click="handleCreateColumn">
-              เพิ่ม
-            </button>
-            <button class="cursor-pointer rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700" @click="activeEditor = null">
-              ยกเลิก
-            </button>
+            + เพิ่มคอลัมน์
+          </button>
+
+          <div v-else class="rounded-lg bg-gray-100 p-3" @click.stop>
+            <input
+              v-model="newColumnName"
+              type="text"
+              placeholder="ชื่อคอลัมน์"
+              class="mb-2 w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
+              @keyup.enter="handleCreateColumn"
+            >
+            <div class="flex gap-2">
+              <button class="cursor-pointer rounded-md bg-blue-600 px-3 py-1 text-sm text-white" @click="handleCreateColumn">
+                เพิ่ม
+              </button>
+              <button class="cursor-pointer rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700" @click="activeEditor = null">
+                ยกเลิก
+              </button>
+            </div>
           </div>
         </div>
       </div>

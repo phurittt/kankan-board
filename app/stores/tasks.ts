@@ -128,7 +128,20 @@ export const useTasksStore = defineStore('tasks', () => {
     const task = getTaskById(taskId)
     if (!task || task.assigneeIds.includes(userId)) return
     task.assigneeIds.push(userId)
+
+    const authStore = useAuthStore()
+    if (userId !== authStore.currentUserId) {
+      const notificationsStore = useNotificationsStore()
+      notificationsStore.push({
+        recipientUserId: userId,
+        type: 'task-assigned',
+        message: `คุณถูกมอบหมายให้ทำ "${task.title}"`,
+        taskId: task.id,
+        boardId: task.boardId,
+      })
+    }
   }
+
 
   function unassignMember(taskId: string, userId: string) {
     const task = getTaskById(taskId)

@@ -12,6 +12,7 @@ function toggleSidebar() {
 
 function toggleProfileMenu() {
   isProfileMenuOpen.value = !isProfileMenuOpen.value
+  isNotificationsOpen.value = false
 }
 
 function handleLogout() {
@@ -19,6 +20,43 @@ function handleLogout() {
   authStore.logout()
   navigateTo('/login')
 }
+
+// notifications
+const notificationsStore = useNotificationsStore()
+const isNotificationsOpen = ref(false)
+
+const unreadCount = computed(() =>
+  authStore.currentUserId ? notificationsStore.unreadForUser(authStore.currentUserId).length : 0
+)
+const myNotifications = computed(() =>
+  authStore.currentUserId ? notificationsStore.allForUser(authStore.currentUserId) : []
+)
+
+function toggleNotifications() {
+  isNotificationsOpen.value = !isNotificationsOpen.value
+  isProfileMenuOpen.value = false
+}
+
+function handleNotificationClick(notification: { id: string, boardId?: string }) {
+  notificationsStore.markRead(notification.id)
+  isNotificationsOpen.value = false
+  if (notification.boardId) navigateTo(`/boards/${notification.boardId}`)
+}
+
+function handleClickOutside(event: MouseEvent) {
+  const target = event.target as HTMLElement
+  if (target.closest('[data-header-menu]')) return
+  isNotificationsOpen.value = false
+  isProfileMenuOpen.value = false
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <template>
@@ -32,11 +70,42 @@ function handleLogout() {
       </div>
 
       <div class="flex items-center gap-4">
-        <button class="cursor-pointer text-xl text-gray-600 hover:text-gray-900" title="การแจ้งเตือน">
-          🔔
-        </button>
+        <div class="relative" data-header-menu>
+          <button
+            class="relative cursor-pointer text-xl text-gray-600 hover:text-gray-900"
+            title="การแจ้งเตือน"
+            @click="toggleNotifications"
+          >
+            🔔
+            <span
+              v-if="unreadCount > 0"
+              class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white"
+            >
+              {{ unreadCount }}
+            </span>
+          </button>
 
-        <div class="relative">
+          <div
+            v-if="isNotificationsOpen"
+            class="absolute right-0 z-10 mt-2 max-h-96 w-72 overflow-y-auto rounded-md bg-white py-1 shadow-lg"
+          >
+            <p v-if="myNotifications.length === 0" class="px-4 py-3 text-sm text-gray-500">
+              ยังไม่มีการแจ้งเตือน
+            </p>
+            <button
+              v-for="n in myNotifications"
+              :key="n.id"
+              class="block w-full cursor-pointer border-b border-gray-100 px-4 py-2 text-left text-sm hover:bg-gray-50"
+              :class="n.read ? 'text-gray-500' : 'bg-blue-50 font-medium text-gray-900'"
+              @click="handleNotificationClick(n)"
+            >
+              {{ n.message }}
+            </button>
+          </div>
+        </div>
+
+
+        <div class="relative" data-header-menu>
           <button
             class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-200 text-lg hover:bg-gray-300"
             @click="toggleProfileMenu"

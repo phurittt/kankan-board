@@ -15,8 +15,18 @@ const emit = defineEmits<{
 }>()
 
 const boardStore = useBoardsStore()
+const usersStore = useUserStore()
 
 const BOARD_COLORS = ['#3b82f6', '#f97316', '#10b981', '#ec4899', '#8b5cf6', '#ef4444', '#eab308', '#64748b']
+
+const boardMembers = computed(() =>
+  props.board.memberIds
+    .map((id) => usersStore.getUserById(id))
+    .filter((u): u is NonNullable<typeof u> => u !== undefined)
+)
+
+const visibleMembers = computed(() => boardMembers.value.slice(0, 5))
+const extraMemberCount = computed(() => Math.max(0, boardMembers.value.length - 5))
 
 const renameDraft = ref(props.board.name)
 const memberUsernameDraft = ref('')
@@ -156,6 +166,24 @@ function confirmDelete() {
             ยกเลิก
           </button>
         </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-3 right-3 flex -space-x-2">
+      <div
+        v-for="user in visibleMembers"
+        :key="user.id"
+        class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white text-xs font-medium text-white"
+        :style="{ backgroundColor: user.color }"
+        :title="user.displayName"
+      >
+        {{ user.displayName.charAt(0).toUpperCase() }}
+      </div>
+      <div
+        v-if="extraMemberCount > 0"
+        class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gray-300 text-xs font-medium text-gray-700"
+      >
+        +{{ extraMemberCount }}
       </div>
     </div>
   </NuxtLink>
