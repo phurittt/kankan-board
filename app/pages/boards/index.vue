@@ -62,7 +62,7 @@ onUnmounted(() => {
         @open-menu="openMenuBoardId = board.id"
         @close-menu="closeMenu"
         @request-delete="confirmDeleteBoardId = board.id"
-        @cancel-delete="confirmDeleteBoardId = null"
+        @cancel-delete="closeMenu"
       />
     </div>
 

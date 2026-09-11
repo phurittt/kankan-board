@@ -239,7 +239,7 @@ function handleChange(event: any) {
               <button class="flex-1 cursor-pointer rounded-md bg-red-600 px-2 py-1 text-sm text-white hover:bg-red-700" @click="confirmDeleteColumn">
                 ลบ
               </button>
-              <button class="flex-1 cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm text-gray-700 hover:bg-gray-100" @click="activeSubPanel = null">
+              <button class="flex-1 cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm text-gray-700 hover:bg-gray-100" @click="activeSubPanel = null; emit('set-active-editor', null)">
                 ยกเลิก
               </button>
             </div>
