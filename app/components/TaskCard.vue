@@ -33,6 +33,14 @@ const tags = computed(() =>
 function toggleDone() {
   tasksStore.updateTask(props.task.id, { done: !props.task.done })
 }
+
+const dueDateLabel = computed(() => {
+  if (!props.task.dueDate) return null
+  const [year, month, day] = props.task.dueDate.split('-').map(Number)
+  if (year === undefined || month === undefined || day === undefined) return null
+  const date = new Date(year, month - 1, day)
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+})
 </script>
 
 <template>
@@ -63,9 +71,12 @@ function toggleDone() {
       </span>
     </div>
 
-    <div v-if="task.dueDate || assignees.length > 0" class="mt-2 flex items-center justify-between">
-      <span v-if="task.dueDate" class="text-xs text-gray-500">
-        {{ task.dueDate }}
+    <div v-if="dueDateLabel || assignees.length > 0" class="mt-2 flex items-center justify-between">
+      <span v-if="dueDateLabel" class="flex items-center gap-1 text-xs text-gray-500">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-3.5 w-3.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        {{ dueDateLabel }}
       </span>
       <span v-else />
 

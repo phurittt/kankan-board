@@ -101,9 +101,14 @@ function handleMoved() {
         >
           ป้าย
         </button>
-        <button class="cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
+        <button
+          class="cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50"
+          :class="activeSection === 'date' ? 'bg-gray-100 text-gray-900' : 'text-gray-700'"
+          @click="toggleSection('date')"
+        >
           วันที่
         </button>
+
         <button
           class="cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50"
           :class="activeSection === 'member' ? 'bg-gray-100 text-gray-900' : 'text-gray-700'"
@@ -120,7 +125,11 @@ function handleMoved() {
         </button>
       </div>
 
-      <div v-if="appliedTags.length > 0 || assignedMembers.length > 0" class="mb-4 space-y-2">
+      <div v-if="task.dueDate || appliedTags.length > 0 || assignedMembers.length > 0" class="mb-4 space-y-2">
+        <p v-if="task.dueDate" class="text-xs text-gray-500">
+          ครบกำหนด: {{ task.dueDate }}
+          <span v-if="task.dueTime" class="ml-2">{{ task.dueTime }} น.</span>
+        </p>
         <div v-if="assignedMembers.length > 0" class="flex items-center gap-2">
           <span class="text-xs font-medium text-gray-500">สมาชิก:</span>
           <div class="flex -space-x-2">
@@ -151,6 +160,7 @@ function handleMoved() {
       <TaskLabelPanel v-if="activeSection === 'label'" :task="task" @close="activeSection = null" />
       <TaskMemberPanel v-if="activeSection === 'member'" :task="task" @close="activeSection = null" />
       <TaskMovePanel v-if="activeSection === 'move'" :task="task" @close="activeSection = null" @moved="handleMoved" />
+      <TaskDatePanel v-if="activeSection === 'date'" :task="task" @close="activeSection = null" />
 
       <div class="mb-2">
         <label class="mb-1 block text-sm font-medium text-gray-700">คำอธิบาย</label>
