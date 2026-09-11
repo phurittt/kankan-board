@@ -113,6 +113,17 @@ function confirmDelete() {
       <label class="mb-1 block text-xs font-medium text-gray-500">สีบอร์ด</label>
       <div class="mb-3 flex flex-wrap gap-2">
         <button
+          class="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 bg-white text-gray-400"
+          :style="{ borderColor: board.color === '#ffffff' ? '#111827' : '#d1d5db' }"
+          title="ไม่มีสี"
+          @click="selectColor('#ffffff')"
+        >
+          <svg viewBox="0 0 20 20" class="h-full w-full">
+            <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.3" />
+            <line x1="4.5" y1="15.5" x2="15.5" y2="4.5" stroke="currentColor" stroke-width="1.3" />
+          </svg>
+        </button>
+        <button
           v-for="color in BOARD_COLORS"
           :key="color"
           class="h-6 w-6 cursor-pointer rounded-full border-2"

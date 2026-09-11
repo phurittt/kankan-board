@@ -164,9 +164,20 @@ function handleChange(event: any) {
             ย้ายรายการ
           </button>
 
-          <div class="px-2 py-1.5">
-            <p class="mb-1 text-xs font-medium text-gray-500">สี</p>
+          <div class="border-t border-b border-gray-200 px-2 py-2">
+            <p class="mb-1 text-sm font-medium text-gray-700">เลือกสี</p>
             <div class="flex flex-wrap gap-2">
+              <button
+                class="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border-2 bg-white text-gray-400"
+                :style="{ borderColor: column.color === '#ffffff' ? '#111827' : '#d1d5db' }"
+                title="ไม่มีสี"
+                @click="selectColor('#ffffff')"
+              >
+                <svg viewBox="0 0 20 20" class="h-full w-full">
+                  <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.3" />
+                  <line x1="4.5" y1="15.5" x2="15.5" y2="4.5" stroke="currentColor" stroke-width="1.3" />
+                </svg>
+              </button>
               <button
                 v-for="color in PALETTE_COLORS"
                 :key="color"
