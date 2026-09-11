@@ -151,7 +151,14 @@ function handleChange(event: any) {
           @click.stop
         >
           <button
-            class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
+            class="absolute right-2 top-2 flex h-5 w-5 cursor-pointer items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+            @click="emit('set-active-editor', null)"
+          >
+            ✕
+          </button>
+
+          <button
+            class="mt-6 block w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
             @click="handleAddTaskClick"
           >
             เพิ่มการ์ด task
@@ -214,6 +221,10 @@ function handleChange(event: any) {
             v-if="activeSubPanel === 'delete'"
             class="absolute left-full top-0 ml-2 w-56 rounded-md bg-white p-3 shadow-lg"
           >
+            <p class="mb-2 text-center text-sm font-medium text-gray-900">
+              คุณแน่ใจหรือไม่
+            </p>
+            <hr class="mb-2 border-gray-200">
             <p class="mb-3 text-sm text-gray-700">
               คอลัมน์และ task ข้างในจะถูกลบถาวร
             </p>

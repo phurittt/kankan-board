@@ -160,6 +160,10 @@ function confirmDelete() {
         v-if="isConfirmingDelete"
         class="absolute left-full top-0 ml-2 w-56 rounded-md bg-white p-3 shadow-lg"
       >
+        <p class="mb-2 text-center text-sm font-medium text-gray-900">
+          คุณแน่ใจหรือไม่
+        </p>
+        <hr class="mb-2 border-gray-200">
         <p class="mb-3 text-sm text-gray-700">
           บอร์ดจะถูกลบถาวร คุณจะไม่สามารถเปิดบอร์ดนี้ได้อีก
         </p>

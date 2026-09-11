@@ -76,9 +76,9 @@ function handleMoved() {
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="emit('close')">
     <div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-xl">
-      <div class="mb-4 flex items-start gap-3">
+      <div class="mb-4 flex items-center gap-3">
         <button
-          class="mt-1 h-5 w-5 shrink-0 cursor-pointer rounded-full border-2"
+          class="h-5 w-5 shrink-0 cursor-pointer rounded-full border-2"
           :class="task.done ? 'border-green-600 bg-green-600' : 'border-gray-400 bg-white'"
           @click="toggleDone"
         />
@@ -204,6 +204,10 @@ function handleMoved() {
             v-if="isConfirmingDelete"
             class="absolute bottom-full right-0 mb-2 w-56 rounded-md bg-white p-3 shadow-lg"
           >
+            <p class="mb-2 text-center text-sm font-medium text-gray-900">
+              คุณแน่ใจหรือไม่
+            </p>
+            <hr class="mb-2 border-gray-200">
             <p class="mb-3 text-sm text-gray-700">
               Task นี้จะถูกลบถาวร
             </p>
