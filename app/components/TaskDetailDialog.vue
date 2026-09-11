@@ -16,7 +16,7 @@ const usersStore = useUserStore()
 const titleDraft = ref(props.task.title)
 const descriptionDraft = ref(props.task.description ?? '')
 
-const activeSection = ref<'label' | 'date' | 'member' | 'move' | null>(null)
+const activeSection = ref<'label' | 'date' | 'member' | 'move' | 'image' | null>(null)
 const isConfirmingDelete = ref(false)
 
 watch(() => props.task.id, () => {
@@ -57,7 +57,8 @@ const boardMembers = computed(() => {
 })
 const assignedMembers = computed(() => boardMembers.value.filter((u) => props.task.assigneeIds.includes(u.id)))
 
-function toggleSection(section: 'label' | 'date' | 'member' | 'move') {
+//ปุ่ม
+function toggleSection(section: 'label' | 'date' | 'member' | 'move' | 'image') {
   activeSection.value = activeSection.value === section ? null : section
 }
 
@@ -123,6 +124,14 @@ function handleMoved() {
         >
           ย้าย
         </button>
+        <button
+          class="cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50"
+          :class="activeSection === 'image' ? 'bg-gray-100 text-gray-900' : 'text-gray-700'"
+          @click="toggleSection('image')"
+        >
+          รูป
+        </button>
+
       </div>
 
       <div v-if="task.dueDate || appliedTags.length > 0 || assignedMembers.length > 0" class="mb-4 space-y-2">
@@ -161,6 +170,8 @@ function handleMoved() {
       <TaskMemberPanel v-if="activeSection === 'member'" :task="task" @close="activeSection = null" />
       <TaskMovePanel v-if="activeSection === 'move'" :task="task" @close="activeSection = null" @moved="handleMoved" />
       <TaskDatePanel v-if="activeSection === 'date'" :task="task" @close="activeSection = null" />
+      <TaskImagePanel v-if="activeSection === 'image'" :task="task" @close="activeSection = null" />
+
 
       <div class="mb-2">
         <label class="mb-1 block text-sm font-medium text-gray-700">คำอธิบาย</label>

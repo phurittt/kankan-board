@@ -45,56 +45,59 @@ const dueDateLabel = computed(() => {
 
 <template>
   <div
-    class="cursor-pointer rounded-md bg-white p-2 text-sm shadow-sm hover:shadow-md"
+    class="cursor-pointer overflow-hidden rounded-md bg-white text-sm shadow-sm hover:shadow-md"
     @click="emit('open')"
   >
-    <div v-if="tags.length > 0" class="mb-1 flex flex-wrap gap-1">
-      <span
-        v-for="tag in tags"
-        :key="tag.id"
-        class="flex h-4 w-14 shrink-0 items-center justify-center rounded-full px-1 text-white"
-        :style="{ backgroundColor: tag.color }"
-      >
-        <span class="min-w-0 truncate text-[10px] leading-none">{{ tag.label }}</span>
-      </span>
-    </div>
+    <img v-if="task.imageUrl" :src="task.imageUrl" class="block h-32 w-full object-cover" alt="">
 
-
-    <div class="flex items-start gap-2">
-      <button
-        class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded-full border-2"
-        :class="task.done ? 'border-green-600 bg-green-600' : 'border-gray-400 bg-white'"
-        @click.stop="toggleDone"
-      />
-      <span class="min-w-0 flex-1 break-words" :class="task.done ? 'text-gray-400 line-through' : 'text-gray-800'">
-        {{ task.title }}
-      </span>
-    </div>
-
-    <div v-if="dueDateLabel || assignees.length > 0" class="mt-2 flex items-center justify-between">
-      <span v-if="dueDateLabel" class="flex items-center gap-1 text-xs text-gray-500">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-3.5 w-3.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
-        {{ dueDateLabel }}
-      </span>
-      <span v-else />
-
-      <div v-if="assignees.length > 0" class="flex -space-x-2">
-        <div
-          v-for="user in visibleAssignees"
-          :key="user.id"
-          class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white text-xs font-medium text-white"
-          :style="{ backgroundColor: user.color }"
-          :title="user.displayName"
+    <div class="p-2">
+      <div v-if="tags.length > 0" class="mb-1 flex flex-wrap gap-1">
+        <span
+          v-for="tag in tags"
+          :key="tag.id"
+          class="flex h-4 w-14 shrink-0 items-center justify-center rounded-full px-1 text-white"
+          :style="{ backgroundColor: tag.color }"
         >
-          {{ user.displayName.charAt(0).toUpperCase() }}
-        </div>
-        <div
-          v-if="extraAssigneeCount > 0"
-          class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gray-300 text-xs font-medium text-gray-700"
-        >
-          +{{ extraAssigneeCount }}
+          <span class="min-w-0 truncate text-[10px] leading-none">{{ tag.label }}</span>
+        </span>
+      </div>
+
+      <div class="flex items-start gap-2">
+        <button
+          class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded-full border-2"
+          :class="task.done ? 'border-green-600 bg-green-600' : 'border-gray-400 bg-white'"
+          @click.stop="toggleDone"
+        />
+        <span class="min-w-0 flex-1 break-words" :class="task.done ? 'text-gray-400 line-through' : 'text-gray-800'">
+          {{ task.title }}
+        </span>
+      </div>
+
+      <div v-if="dueDateLabel || assignees.length > 0" class="mt-2 flex items-center justify-between">
+        <span v-if="dueDateLabel" class="flex items-center gap-1 text-xs text-gray-500">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-3.5 w-3.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          {{ dueDateLabel }}
+        </span>
+        <span v-else />
+
+        <div v-if="assignees.length > 0" class="flex -space-x-2">
+          <div
+            v-for="user in visibleAssignees"
+            :key="user.id"
+            class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white text-xs font-medium text-white"
+            :style="{ backgroundColor: user.color }"
+            :title="user.displayName"
+          >
+            {{ user.displayName.charAt(0).toUpperCase() }}
+          </div>
+          <div
+            v-if="extraAssigneeCount > 0"
+            class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gray-300 text-xs font-medium text-gray-700"
+          >
+            +{{ extraAssigneeCount }}
+          </div>
         </div>
       </div>
     </div>

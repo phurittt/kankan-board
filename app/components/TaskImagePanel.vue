@@ -29,7 +29,7 @@ function removeImage() {
 </script>
 
 <template>
-  <div class="mb-4 rounded-md border border-gray-200 p-3">
+  <div class="mb-4 w-fit rounded-md border border-gray-200 p-3">
     <div class="mb-2 flex items-center justify-between">
       <p class="text-sm font-medium text-gray-700">รูปภาพ</p>
       <button class="cursor-pointer text-gray-400 hover:text-gray-700" @click="emit('close')">
@@ -37,9 +37,14 @@ function removeImage() {
       </button>
     </div>
 
-    <img v-if="task.imageUrl" :src="task.imageUrl" class="mb-3 h-32 w-full rounded-md object-cover" alt="">
+    <img v-if="task.imageUrl" :src="task.imageUrl" class="mb-3 h-64 w-64 rounded-md object-cover" alt="">
 
-    <input type="file" accept="image/*" class="mb-2 block w-full text-sm" @change="handleFileChange">
+    <input
+      type="file"
+      accept="image/*"
+      class="mb-2 block w-full text-sm text-gray-700 file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-600 file:px-3 file:py-1.5 file:text-sm file:text-white hover:file:bg-blue-700"
+      @change="handleFileChange"
+    >
 
     <button
       v-if="task.imageUrl"
