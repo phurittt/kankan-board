@@ -4,6 +4,12 @@
 
 เป็นแอปแบบ **frontend-only**: ไม่มี backend/API/ฐานข้อมูลจริง ข้อมูลทั้งหมด (ผู้ใช้, บอร์ด, คอลัมน์, task, แท็ก, การแจ้งเตือน) เก็บอยู่ใน **LocalStorage** ของเบราว์เซอร์
 
+## ลิงก์ที่เกี่ยวข้อง
+
+- **GitHub**: https://github.com/phurittt/kanban-board.git
+- **Vercel**: https://kanban-board-two-virid.vercel.app/boards
+- **Figma**: https://www.figma.com/design/xXj3qgecsKXaLG5nwYQkAL/Kanban-Board?node-id=0-1&t=MGZYiFDRNfjNFtUs-1
+
 ## วิธีรัน
 
 ต้องมี [Node.js](https://nodejs.org/) ติดตั้งไว้ (แนะนำเวอร์ชันตาม `.nvmrc` คือ `22.23.2` แต่ Node LTS เวอร์ชันใกล้เคียงก็ใช้ได้)
