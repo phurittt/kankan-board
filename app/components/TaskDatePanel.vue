@@ -12,12 +12,32 @@ const emit = defineEmits<{
 const tasksStore = useTasksStore()
 
 const dateDraft = ref(props.task.dueDate ?? '')
-const timeDraft = ref(props.task.dueTime ?? '')
+
+const [initialHour, initialMinute] = (props.task.dueTime ?? '').split(':')
+const hourDraft = ref(initialHour ?? '')
+const minuteDraft = ref(initialMinute ?? '')
+
+function sanitizeTimePart(value: string, max: number) {
+  const digitsOnly = value.replace(/\D/g, '').slice(0, 2)
+  if (!digitsOnly) return ''
+  return String(Math.min(Number(digitsOnly), max))
+}
+
+watch(hourDraft, (value) => {
+  hourDraft.value = sanitizeTimePart(value, 23)
+})
+watch(minuteDraft, (value) => {
+  minuteDraft.value = sanitizeTimePart(value, 59)
+})
 
 function handleSave() {
+  const dueTime = hourDraft.value || minuteDraft.value
+    ? `${hourDraft.value.padStart(2, '0')}:${minuteDraft.value.padStart(2, '0')}`
+    : null
+
   tasksStore.updateTask(props.task.id, {
     dueDate: dateDraft.value || null,
-    dueTime: timeDraft.value || null,
+    dueTime,
   })
   emit('close')
 }
@@ -38,11 +58,26 @@ function handleSave() {
         type="date"
         class="flex-1 rounded-md border border-gray-300 px-2 py-1 text-sm"
       >
-      <input
-        v-model="timeDraft"
-        type="time"
-        class="w-28 rounded-md border border-gray-300 px-2 py-1 text-sm"
-      >
+      <div class="flex items-center gap-1">
+        <input
+          v-model="hourDraft"
+          type="text"
+          inputmode="numeric"
+          maxlength="2"
+          placeholder="00"
+          class="w-14 rounded-md border border-gray-300 px-2 py-1 text-center text-sm"
+        >
+        <span class="text-gray-400">:</span>
+        <input
+          v-model="minuteDraft"
+          type="text"
+          inputmode="numeric"
+          maxlength="2"
+          placeholder="00"
+          class="w-14 rounded-md border border-gray-300 px-2 py-1 text-center text-sm"
+        >
+        <span class="text-sm text-gray-500">น.</span>
+      </div>
     </div>
 
     <button
