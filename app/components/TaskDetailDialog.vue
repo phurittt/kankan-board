@@ -115,7 +115,7 @@ function handleMoved() {
           :class="activeSection === 'member' ? 'bg-gray-100 text-gray-900' : 'text-gray-700'"
           @click="toggleSection('member')"
         >
-          สมาชิก
+          เพิ่มสมาชิก
         </button>
         <button
           class="cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50"
