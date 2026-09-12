@@ -7,7 +7,7 @@
 ## ลิงก์ที่เกี่ยวข้อง
 
 - **GitHub**: https://github.com/phurittt/kanban-board.git
-- **Vercel**: https://kanban-board-two-virid.vercel.app/boards
+- **Vercel**: https://kanban-board-two-virid.vercel.app
 - **Figma**: https://www.figma.com/design/xXj3qgecsKXaLG5nwYQkAL/Kanban-Board?node-id=0-1&t=MGZYiFDRNfjNFtUs-1
 
 ## วิธีรัน
