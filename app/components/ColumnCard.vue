@@ -27,6 +27,7 @@ const isAddingTask = computed(() => props.activeEditor === addTaskKey.value)
 
 const nameDraft = ref(props.column.name)
 const newTaskTitle = ref('')
+const newTaskError = ref('')
 
 const activeSubPanel = ref<'move' | 'delete' | null>(null)
 const moveTargetIndex = ref(0)
@@ -71,12 +72,16 @@ function confirmDeleteColumn() {
 
 function handleAddTaskClick() {
   newTaskTitle.value = ''
+  newTaskError.value = ''
   emit('set-active-editor', addTaskKey.value)
 }
 
 function submitNewTask() {
   const title = newTaskTitle.value.trim()
-  if (!title) return
+  if (!title) {
+    newTaskError.value = 'กรุณากรอกชื่อ task'
+    return
+  }
   tasksStore.createTask(props.column.id, props.column.boardId, title)
   newTaskTitle.value = ''
   emit('set-active-editor', null)
@@ -266,11 +271,14 @@ function handleChange(event: any) {
               v-model="newTaskTitle"
               type="text"
               placeholder="ชื่อ task"
-              class="mb-2 w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
+              class="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
               autofocus
               @keyup.enter="submitNewTask"
             >
-            <div class="flex gap-2">
+            <p v-if="newTaskError" class="mb-2 mt-1 text-xs text-gray-500">
+              {{ newTaskError }}
+            </p>
+            <div class="mt-2 flex gap-2">
               <button class="cursor-pointer rounded-md bg-blue-600 px-3 py-1 text-sm text-white" @click="submitNewTask">
                 เพิ่ม
               </button>

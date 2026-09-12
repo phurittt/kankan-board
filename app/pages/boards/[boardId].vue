@@ -18,11 +18,19 @@ if (!board.value) {
 const columns = computed(() => columnsStore.columnsForBoard(boardId))
 
 const newColumnName = ref('')
+const newColumnError = ref('')
 const activeEditor = ref<string | null>(null)
+
+watch(activeEditor, (value) => {
+  if (value === 'add-column') newColumnError.value = ''
+})
 
 function handleCreateColumn() {
   const name = newColumnName.value.trim()
-  if (!name) return
+  if (!name) {
+    newColumnError.value = 'กรุณากรอกชื่อคอลัมน์'
+    return
+  }
   columnsStore.createColumn(boardId, name)
   newColumnName.value = ''
   activeEditor.value = null
@@ -77,10 +85,13 @@ onUnmounted(() => {
               v-model="newColumnName"
               type="text"
               placeholder="ชื่อคอลัมน์"
-              class="mb-2 w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
+              class="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
               @keyup.enter="handleCreateColumn"
             >
-            <div class="flex gap-2">
+            <p v-if="newColumnError" class="mb-2 mt-1 text-xs text-gray-500">
+              {{ newColumnError }}
+            </p>
+            <div class="mt-2 flex gap-2">
               <button class="cursor-pointer rounded-md bg-blue-600 px-3 py-1 text-sm text-white" @click="handleCreateColumn">
                 เพิ่ม
               </button>

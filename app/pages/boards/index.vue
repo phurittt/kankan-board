@@ -1,9 +1,8 @@
 <script setup lang="ts">
 const boardStore = useBoardsStore()
 
-const openMenuBoardId = ref<string | null>(null)
+const activeEditor = ref<string | null>(null)
 const confirmDeleteBoardId = ref<string | null>(null)
-const isCreateBoardOpen = ref(false)
 const sortMode = ref('แก้ไขล่าสุด')
 
 const sortedBoards = computed(() => {
@@ -18,7 +17,7 @@ const sortedBoards = computed(() => {
 })
 
 function closeMenu() {
-  openMenuBoardId.value = null
+  activeEditor.value = null
   confirmDeleteBoardId.value = null
 }
 
@@ -26,7 +25,6 @@ function handleClickOutside(event: MouseEvent) {
   const target = event.target as HTMLElement
   if (target.closest('[data-board-menu]')) return
   closeMenu()
-  isCreateBoardOpen.value = false
 }
 
 onMounted(() => {
@@ -48,18 +46,18 @@ onUnmounted(() => {
 
     <div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
       <CreateBoardCard
-        :is-open="isCreateBoardOpen"
-        @open="isCreateBoardOpen = true"
-        @close="isCreateBoardOpen = false"
+        :is-open="activeEditor === 'create'"
+        @open="activeEditor = 'create'"
+        @close="activeEditor = null"
       />
 
       <BoardCard
         v-for="board in sortedBoards"
         :key="board.id"
         :board="board"
-        :is-menu-open="openMenuBoardId === board.id"
+        :is-menu-open="activeEditor === `menu:${board.id}`"
         :is-confirming-delete="confirmDeleteBoardId === board.id"
-        @open-menu="openMenuBoardId = board.id"
+        @open-menu="activeEditor = `menu:${board.id}`"
         @close-menu="closeMenu"
         @request-delete="confirmDeleteBoardId = board.id"
         @cancel-delete="closeMenu"
